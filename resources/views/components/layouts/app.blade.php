@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ParaQuarium - 水質管理システム</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     <!-- React & Lucide for icons -->
