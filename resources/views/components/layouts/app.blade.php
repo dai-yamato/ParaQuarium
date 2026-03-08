@@ -9,6 +9,10 @@
     @livewireStyles
     <!-- React & Lucide for icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+    <!-- Alpine JS is loaded by Livewire -->
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-cyan-200">
     <div class="min-h-screen">
@@ -21,9 +25,27 @@
                     </div>
                     <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-blue-600">ParaQuarium</span>
                 </div>
-                <div>
-                    <!-- Could put user auth menu here -->
+                
+                @auth
+                <div class="relative" x-data="{ open: false }" @click.away="open = false">
+                    <button @click="open = !open" class="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-800 focus:outline-none transition-colors">
+                        {{ Auth::user()->name }}
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <div x-show="open" x-cloak x-transition.opacity
+                         class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                        <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 flex items-center gap-2">
+                            <i data-lucide="user" class="w-4 h-4"></i> プロフィール
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 flex items-center gap-2">
+                                <i data-lucide="log-out" class="w-4 h-4"></i> ログアウト
+                            </button>
+                        </form>
+                    </div>
                 </div>
+                @endauth
             </div>
         </header>
 
