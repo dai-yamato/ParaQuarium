@@ -237,6 +237,74 @@
             </div>
         </div>
 
+        <!-- Trends Chart -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden min-w-0 mb-6" 
+             x-data="{ 
+                chart: null,
+                initChart() {
+                    const data = $wire.chartData;
+                    if(data.series.length === 0) return;
+
+                    const options = {
+                        chart: {
+                            type: 'line',
+                            height: 350,
+                            toolbar: { show: false },
+                            zoom: { enabled: false },
+                            fontFamily: 'inherit',
+                            animations: { enabled: true }
+                        },
+                        series: data.series,
+                        xaxis: {
+                            categories: data.categories,
+                            labels: {
+                                style: { colors: '#64748b' }
+                            }
+                        },
+                        yaxis: {
+                            labels: {
+                                style: { colors: '#64748b' }
+                            }
+                        },
+                        stroke: { curve: 'smooth', width: 3 },
+                        markers: { size: 4, strokeWidth: 0, hover: { size: 6 } },
+                        dataLabels: { enabled: false },
+                        grid: { borderColor: '#f1f5f9', strokeDashArray: 4 },
+                        theme: { palette: 'palette1' },
+                        legend: { position: 'top', horizontalAlign: 'right' },
+                        tooltip: { theme: 'light' }
+                    };
+                    this.chart = new ApexCharts(this.$refs.chart, options);
+                    this.chart.render();
+
+                    // Watch for Livewire updates to dynamically update chart
+                    $wire.$watch('chartData', (newData) => {
+                        if(this.chart) {
+                            this.chart.updateOptions({
+                                xaxis: { categories: newData.categories }
+                            });
+                            this.chart.updateSeries(newData.series);
+                        } else if (newData.series.length > 0) {
+                            this.initChart();
+                        }
+                    });
+                }
+             }"
+             x-init="$nextTick(() => initChart())">
+            <div class="p-5 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+                <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                    <i data-lucide="trending-up" class="w-4 h-4 text-cyan-600"></i> 水質の変化トレンド
+                </h3>
+            </div>
+            <div class="p-5">
+                <div x-ref="chart" class="w-full min-h-[350px]"></div>
+                <!-- empty state when no data exists -->
+                <div x-show="$wire.chartData.series.length === 0" class="h-[350px] flex items-center justify-center text-slate-400 italic text-sm" style="display: none;">
+                    記録データがありません。水質データを記録するとここにグラフが表示されます。
+                </div>
+            </div>
+        </div>
+
         <!-- History Tables -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 min-w-0">
             <!-- Water History -->

@@ -9,6 +9,8 @@
     @livewireStyles
     <!-- React & Lucide for icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <style>
         [x-cloak] { display: none !important; }
     </style>

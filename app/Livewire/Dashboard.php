@@ -37,6 +37,9 @@ class Dashboard extends Component
     public $m_description;
     public $m_date;
 
+    // Chart Data
+    public array $chartData = ['categories' => [], 'series' => []];
+
     public function mount()
     {
         $this->loadTanks();
@@ -47,6 +50,8 @@ class Dashboard extends Component
         if ($this->tanks->isNotEmpty()) {
             $this->selectedTankId = $this->tanks->first()->id;
         }
+
+        $this->updateChartData();
     }
 
     public function loadTanks()
@@ -74,6 +79,7 @@ class Dashboard extends Component
     public function selectTank($id)
     {
         $this->selectedTankId = $id;
+        $this->updateChartData();
     }
 
     public function showAddTankForm()
@@ -275,6 +281,46 @@ class Dashboard extends Component
         return $latestRecord->values->mapWithKeys(function ($val) {
             return [$val->parameter_type_id => $val->value];
         })->toArray();
+    }
+
+    public function updateChartData()
+    {
+        if (!$this->selectedTankId) {
+            $this->chartData = ['categories' => [], 'series' => []];
+            return;
+        }
+
+        $records = \App\Models\WaterRecord::with('values.parameterType')
+            ->where('tank_id', $this->selectedTankId)
+            ->orderBy('measured_at', 'asc') // Sort ascending for charts
+            ->get();
+
+        // Limit to latest 15 records to keep chart readable
+        if ($records->count() > 15) {
+            $records = $records->slice(-15)->values();
+        }
+
+        $categories = $records->map(function ($record) {
+            return $record->measured_at->format('m/d H:i');
+        })->toArray();
+
+        $series = [];
+        foreach ($this->parameterTypes as $type) {
+            $data = $records->map(function ($record) use ($type) {
+                $valModel = $record->values->firstWhere('parameter_type_id', $type->id);
+                return $valModel && $valModel->value !== null ? (float)$valModel->value : null;
+            })->toArray();
+            
+            // Only include the series if it has at least one non-null value
+            if (count(array_filter($data, fn($v) => $v !== null)) > 0) {
+                $series[] = [
+                    'name' => $type->name,
+                    'data' => $data
+                ];
+            }
+        }
+
+        $this->chartData = ['categories' => $categories, 'series' => $series];
     }
 
     public function getHistoryParametersProperty()
