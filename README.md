@@ -1,59 +1,101 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<div align="center">
+  <img src="public/favicon.svg" width="120" alt="ParaQuarium Logo">
+  <h1>ParaQuarium</h1>
+  <p><strong>水質・メンテナンスをスマートに管理できるアクアリウム専用ツール</strong></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+  <!-- Badges -->
+  <p>
+    <img src="https://img.shields.io/badge/PHP-8.3-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP">
+    <img src="https://img.shields.io/badge/Laravel-11.x-FF2D20?style=flat-square&logo=laravel&logoColor=white" alt="Laravel">
+    <img src="https://img.shields.io/badge/Livewire-3.x-FB70A9?style=flat-square&logo=livewire&logoColor=white" alt="Livewire">
+    <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+    <img src="https://img.shields.io/badge/Alpine.js-8BC0D0?style=flat-square&logo=alpine.js&logoColor=white" alt="Alpine.js">
+    <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL">
+    <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker">
+  </p>
+</div>
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📖 概要 (Overview)
+**ParaQuarium (パラクアリウム)** は、アクアリストのための高度な水質管理・メンテナンス記録アプリケーションです。
+面倒なノートへのメモをデジタル化し、pH、水温、アンモニアなどのパラメータをクラウド上で管理・グラフ表示することで、美しい水景の維持とトラブルの未然防止をサポートします。
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ✨ 主な機能 (Features)
+- **💧 水質パラメータの記録**: pH、水温、GH、KH、アンモニアなど、様々な項目を日次で記録。
+- **📈 トレンドグラフ**: 記録した水質データをなめらかな折れ線グラフで自動描画（ApexCharts を使用）。
+- **🛠 メンテナンスログ**: 水換え、フィルター掃除、薬浴などの作業履歴とメモを一元管理。
+- **🐟 複数水槽の管理**: 淡水・海水問わず、複数の水槽ごとに独立したデータを追跡。
+- **📱 レスポンシブUI**: Tailwind CSS をベースにした、モダンで美しいGlassmorphism(ガラス調)デザイン。
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🛠 技術スタック (Tech Stack)
+### バックエンド (Backend)
+- **PHP** (v8.3+)
+- **Laravel** (v11.x)
+- **PostgreSQL** (v16.x)
 
-## Learning Laravel
+### フロントエンド (Frontend)
+- **Livewire 3** (動的コンポーネント)
+- **Alpine.js** (軽量JavaScript)
+- **Tailwind CSS** (スタイリング)
+- **ApexCharts** (グラフ描画)
+- **Lucide Icons** (アイコン)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### インフラ (Infrastructure)
+- **Docker & Docker Compose** (開発環境)
+- **Nginx** (Webサーバー)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🚀 開発環境の構築手順 (Getting Started)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+本プロジェクトは Docker Compose を利用して簡単に開発環境を構築できます。
 
-### Premium Partners
+### 1. リポジトリをクローン
+```bash
+git clone https://github.com/your-org/paraquarium.git
+cd paraquarium
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 2. 環境変数の設定
+`.env.example` をコピーして `.env` を作成します。
+```bash
+cp .env.example .env
+```
+※ WSL環境などでUID/GIDを変更する場合は `.env` ファイル内の `WWWGROUP` と `WWWUSER` を適宜調整してください。
 
-## Contributing
+### 3. コンテナのビルドと起動
+```bash
+docker compose up -d --build
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 4. 依存関係のインストール＆セットアップ
+コンテナが起動したら、Laravel側の初期設定を行います。
+```bash
+# Composer依存関係のインストール
+docker compose exec app composer install
 
-## Code of Conduct
+# アプリケーションキーの生成
+docker compose exec app php artisan key:generate
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# データベースのマイグレーション（テーブル作成）
+docker compose exec app php artisan migrate
 
-## Security Vulnerabilities
+# NPMパッケージのインストールとビルド
+docker compose exec app npm install
+docker compose exec app npm run build
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 5. アプリケーションにアクセス
+ブラウザで以下にアクセスしてください。
+- **App URL**: [http://localhost/](http://localhost/)
 
-## License
+（※新規に「登録」ボタンからユーザーを作成してダッシュボードをお使いください。）
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 🔒 ライセンス (License)
+
+This project is proprietary software. All rights reserved by **(株)GooDy**.
+
+&copy; {{ date('Y') }} (株)GooDy. Built with ❤️ and Laravel.
