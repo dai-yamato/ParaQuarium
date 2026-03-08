@@ -346,6 +346,7 @@ class Dashboard extends Component
     public function getPresetParametersProperty()
     {
         return [
+            ['name' => '水温', 'unit' => '℃', 'icon' => 'thermometer'],
             ['name' => 'pH', 'unit' => '', 'icon' => 'test-tube-2'],
             ['name' => '総硬度 (GH)', 'unit' => '°dH', 'icon' => 'droplet'],
             ['name' => '炭酸硬度 (KH)', 'unit' => '°dH', 'icon' => 'droplet'],
