@@ -6,27 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('water_parameters', function (Blueprint $table) {
+        Schema::create('water_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tank_id')->constrained()->onDelete('cascade');
-            $table->float('ph')->nullable();
-            $table->float('temperature')->nullable();
-            $table->float('nitrite')->nullable();
             $table->timestamp('measured_at');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('water_parameters');
+        Schema::dropIfExists('water_records');
     }
 };

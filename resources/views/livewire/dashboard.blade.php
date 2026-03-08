@@ -65,7 +65,7 @@
     </div>
 
     <!-- Main Workspace -->
-    <div class="lg:col-span-3 space-y-6">
+    <div class="lg:col-span-3 space-y-6 min-w-0">
         @if(!$selectedTankId)
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-12 text-center flex flex-col items-center justify-center min-h-[400px]">
             <div class="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mb-4 text-cyan-600">
@@ -83,73 +83,37 @@
             $latest = $this->latestParameters;
             $tank = $this->selectedTank;
         @endphp
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between group hover:shadow-md transition-shadow">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="text-sm font-medium text-slate-500">ステータス</span>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex flex-col justify-between group hover:shadow-md transition-shadow col-span-2 md:col-span-1">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-medium text-slate-500">ステータス</span>
                     <button wire:click="editTank" class="p-1 hover:bg-slate-100 rounded text-slate-400 hover:text-cyan-600 transition-colors" title="水槽を編集">
                         <i data-lucide="edit-2" class="w-4 h-4"></i>
                     </button>
-                    <!-- <i data-lucide="activity" class="w-5 h-5 text-emerald-500"></i> -->
                 </div>
                 <div>
-                    <div class="text-2xl font-bold text-slate-800">{{ $tank->name }}</div>
-                    <div class="text-sm text-slate-500 mt-1">{{ $tank->type === 'freshwater' ? '淡水' : '海水' }}</div>
+                    <div class="text-xl font-bold text-slate-800 truncate">{{ $tank->name }}</div>
+                    <div class="text-xs text-slate-500 mt-1">{{ $tank->type === 'freshwater' ? '淡水' : '海水' }}</div>
                 </div>
             </div>
 
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between group hover:shadow-md transition-shadow relative overflow-hidden">
-                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-red-50 rounded-full opacity-50 pointer-events-none group-hover:scale-110 transition-transform"></div>
+            @foreach($this->parameterTypes as $type)
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex flex-col justify-between group hover:shadow-md transition-shadow relative overflow-hidden">
+                <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-slate-50 rounded-full opacity-50 pointer-events-none group-hover:scale-110 transition-transform"></div>
                 <div class="flex items-center justify-between mb-2 relative z-10">
-                    <span class="text-sm font-medium text-slate-500">水温</span>
-                    <i data-lucide="thermometer" class="w-5 h-5 text-red-500"></i>
+                    <span class="text-xs font-medium text-slate-500 truncate pr-2">{{ $type->name }}</span>
+                    <i data-lucide="{{ $type->icon ?? 'activity' }}" class="w-4 h-4 text-cyan-500 flex-shrink-0"></i>
                 </div>
                 <div class="relative z-10">
                     <div class="flex items-end gap-1">
-                        <span class="text-3xl font-bold text-slate-800">{{ $latest && $latest->temperature !== null ? $latest->temperature : '--' }}</span>
-                        <span class="text-sm text-slate-500 mb-1 font-medium">&deg;C</span>
+                        <span class="text-2xl font-bold text-slate-800">{{ array_key_exists($type->id, $latest) && $latest[$type->id] !== null ? $latest[$type->id] : '--' }}</span>
+                        @if($type->unit)
+                        <span class="text-xs text-slate-500 mb-1 font-medium">{{ $type->unit }}</span>
+                        @endif
                     </div>
                 </div>
             </div>
-
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between group hover:shadow-md transition-shadow relative overflow-hidden">
-                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-cyan-50 rounded-full opacity-50 pointer-events-none group-hover:scale-110 transition-transform"></div>
-                <div class="flex items-center justify-between mb-2 relative z-10">
-                    <span class="text-sm font-medium text-slate-500">pH</span>
-                    <i data-lucide="test-tube-2" class="w-5 h-5 text-cyan-500"></i>
-                </div>
-                <div class="relative z-10">
-                    <div class="text-3xl font-bold text-slate-800">{{ $latest && $latest->ph !== null ? $latest->ph : '--' }}</div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between group hover:shadow-md transition-shadow relative overflow-hidden">
-                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-orange-50 rounded-full opacity-50 pointer-events-none group-hover:scale-110 transition-transform"></div>
-                <div class="flex items-center justify-between mb-2 relative z-10">
-                    <span class="text-sm font-medium text-slate-500">亜硝酸 (NO2)</span>
-                    <i data-lucide="alert-triangle" class="w-5 h-5 text-orange-500"></i>
-                </div>
-                <div class="relative z-10">
-                    <div class="flex items-end gap-1">
-                        <span class="text-3xl font-bold text-slate-800">{{ $latest && $latest->nitrite !== null ? $latest->nitrite : '--' }}</span>
-                        <span class="text-sm text-slate-500 mb-1 font-medium">ppm</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between group hover:shadow-md transition-shadow relative overflow-hidden">
-                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-purple-50 rounded-full opacity-50 pointer-events-none group-hover:scale-110 transition-transform"></div>
-                <div class="flex items-center justify-between mb-2 relative z-10">
-                    <span class="text-sm font-medium text-slate-500">総硬度 (GH)</span>
-                    <i data-lucide="droplet" class="w-5 h-5 text-purple-500"></i>
-                </div>
-                <div class="relative z-10">
-                    <div class="flex items-end gap-1">
-                        <span class="text-3xl font-bold text-slate-800">{{ $latest && $latest->gh !== null ? $latest->gh : '--' }}</span>
-                        <span class="text-sm text-slate-500 mb-1 font-medium">&deg;dH</span>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -166,29 +130,14 @@
                 @endif
                 
                 <form wire:submit.prevent="saveWaterParameters" class="space-y-4">
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        @foreach($this->parameterTypes as $type)
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">水温 (°C)</label>
-                            <input type="number" step="0.1" wire:model="w_temp" placeholder="例: 25.5" class="w-full rounded-xl border-slate-300 focus:border-cyan-500 focus:ring-cyan-500 border px-3 py-2 shadow-sm transition-colors text-sm">
-                            @error('w_temp') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                            <label class="block text-[13px] font-medium text-slate-700 mb-1 truncate" title="{{ $type->name }} @if($type->unit)({{ $type->unit }})@endif">{{ $type->name }} @if($type->unit)<span class="text-slate-500 font-normal">({{ $type->unit }})</span>@endif</label>
+                            <input type="number" step="0.01" wire:model="w_values.{{ $type->id }}" class="w-full rounded-xl border-slate-300 focus:border-cyan-500 focus:ring-cyan-500 border px-3 py-2 shadow-sm transition-colors text-sm">
+                            @error('w_values.'.$type->id) <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">pH (0-14)</label>
-                            <input type="number" step="0.01" wire:model="w_ph" placeholder="例: 7.2" class="w-full rounded-xl border-slate-300 focus:border-cyan-500 focus:ring-cyan-500 border px-3 py-2 shadow-sm transition-colors text-sm">
-                            @error('w_ph') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">亜硝酸 (ppm)</label>
-                            <input type="number" step="0.01" wire:model="w_nitrite" placeholder="例: 0.0" class="w-full rounded-xl border-slate-300 focus:border-cyan-500 focus:ring-cyan-500 border px-3 py-2 shadow-sm transition-colors text-sm">
-                            @error('w_nitrite') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">総硬度 (GH)</label>
-                            <input type="number" step="0.1" wire:model="w_gh" placeholder="例: 4.0" class="w-full rounded-xl border-slate-300 focus:border-cyan-500 focus:ring-cyan-500 border px-3 py-2 shadow-sm transition-colors text-sm">
-                            @error('w_gh') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
-                        </div>
+                        @endforeach
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">測定日時</label>
@@ -201,6 +150,48 @@
                         </button>
                     </div>
                 </form>
+
+                <div class="mt-6 pt-4 border-t border-slate-100" x-data="{ open: false }">
+                    <button type="button" @click="open = !open" class="text-sm text-cyan-600 font-medium flex items-center gap-1 hover:text-cyan-800 transition-colors">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i> 測定項目を追加する
+                    </button>
+                    <div x-show="open" x-cloak class="mt-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        @if (session()->has('param_message'))
+                            <div class="text-emerald-600 text-xs mb-3 font-medium">{{ session('param_message') }}</div>
+                        @endif
+
+                        <div class="mb-4">
+                            <label class="block text-xs font-medium text-slate-500 mb-2">よく使う測定項目</label>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach($this->presetParameters as $index => $preset)
+                                    <button type="button" wire:click="addPresetParameter({{ $index }})" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:border-cyan-300 hover:bg-cyan-50 text-slate-600 hover:text-cyan-700 rounded-lg text-xs font-medium transition-colors shadow-sm whitespace-nowrap">
+                                        <i data-lucide="plus" class="w-3 h-3 flex-shrink-0"></i>
+                                        {{ $preset['name'] }}
+                                    </button>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="border-t border-slate-200/60 pt-3 mt-3">
+                            <label class="block text-xs font-medium text-slate-500 mb-2">またはオリジナルの項目を新規作成</label>
+                            <form wire:submit.prevent="saveCustomParameter" class="space-y-3">
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-[11px] text-slate-400 mb-1">項目名 (例: マグネシウム)</label>
+                                        <input type="text" wire:model="newParamName" class="w-full rounded-lg border-slate-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 text-sm px-3 py-2 border">
+                                        @error('newParamName') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] text-slate-400 mb-1">単位 (例: ppm)</label>
+                                        <input type="text" wire:model="newParamUnit" class="w-full rounded-lg border-slate-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 text-sm px-3 py-2 border">
+                                        @error('newParamUnit') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                    </div>
+                                </div>
+                                <button type="submit" class="bg-slate-700 hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full shadow-sm">オリジナル項目を作成する</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Maintenance Log Form -->
@@ -247,37 +238,39 @@
         </div>
 
         <!-- History Tables -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 min-w-0">
             <!-- Water History -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden min-w-0 flex flex-col">
                 <div class="p-5 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
                     <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
                         <i data-lucide="history" class="w-4 h-4 text-slate-500"></i> 水質データの履歴
                     </h3>
                 </div>
-                <div class="overflow-x-auto">
+                <!-- Add w-full to make sure it can be scrolled inside -->
+                <div class="overflow-x-auto w-full flex-1">
                     <table class="w-full text-left text-sm whitespace-nowrap">
                         <thead class="text-xs text-slate-500 bg-white border-b border-slate-200 font-medium uppercase tracking-wider">
                             <tr>
                                 <th class="px-5 py-3">日時</th>
-                                <th class="px-5 py-3">水温</th>
-                                <th class="px-5 py-3">pH</th>
-                                <th class="px-5 py-3">亜硝酸</th>
-                                <th class="px-5 py-3">GH</th>
+                                @foreach($this->parameterTypes as $type)
+                                <th class="px-5 py-3">{{ $type->name }}</th>
+                                @endforeach
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
-                            @forelse($this->historyParameters as $param)
+                            @forelse($this->historyParameters as $record)
                             <tr class="hover:bg-slate-50/50 transition-colors">
-                                <td class="px-5 py-3 text-slate-600">{{ $param->measured_at->format('Y-m-d H:i') }}</td>
-                                <td class="px-5 py-3 font-medium">{{ $param->temperature ?? '-' }}</td>
-                                <td class="px-5 py-3 font-medium">{{ $param->ph ?? '-' }}</td>
-                                <td class="px-5 py-3 font-medium">{{ $param->nitrite ?? '-' }}</td>
-                                <td class="px-5 py-3 font-medium">{{ $param->gh ?? '-' }}</td>
+                                <td class="px-5 py-3 text-slate-600">{{ $record->measured_at->format('Y-m-d H:i') }}</td>
+                                @foreach($this->parameterTypes as $type)
+                                    @php
+                                        $valModel = $record->values->firstWhere('parameter_type_id', $type->id);
+                                    @endphp
+                                    <td class="px-5 py-3 font-medium">{{ $valModel && $valModel->value !== null ? $valModel->value : '-' }}</td>
+                                @endforeach
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="px-5 py-8 text-center text-slate-400 italic">データがありません。</td>
+                                <td colspan="{{ count($this->parameterTypes) + 1 }}" class="px-5 py-8 text-center text-slate-400 italic">データがありません。</td>
                             </tr>
                             @endforelse
                         </tbody>
